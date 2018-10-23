@@ -7,6 +7,8 @@ You can start a Jekyll blog in either public or a private repository.
 To enable commenting in your blog, add the following to your blog's `_config.yml`:
 ```
 jekyll_comments:
+  show_comments: true
+  allow_new_comments: true
   comment_server: <url of comment server>
 ```
 
