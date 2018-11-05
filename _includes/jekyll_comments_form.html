@@ -1,0 +1,174 @@
+<style>
+div#comment-header, 
+div#comment-header h2, 
+form#comment-form, 
+div.form-control-group {
+  box-sizing: border-box;
+  font-family: inherit;
+  margin-bottom: 1.5em;
+}
+
+div#comment-form-header {
+  margin: 1em 0 2em 0;
+}
+div#comment-form-header h2 {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+.comment-form-control {
+  display: block;
+  width: 100%;
+  padding: 0.4em 0.8em;
+  font-size: inherit;
+  border: 1px solid #bbb;
+  border-radius: 0.4em;
+  box-sizing: border-box;
+}
+form#comment-form textarea {
+  resize: vertical;
+  height: 8em;
+}
+div.form-control-group input {
+  font-size: 90%;
+  height: 2.5em;
+}
+div.form-control-group textarea {
+  font-size: 85%;
+}
+div.form-control-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3em;
+}
+div.form-control-group label span {
+  font-size: small;
+  font-weight: normal;
+}
+.form-button {
+  font-size: inherit;
+  border: 1px solid #bbb;
+  border-radius: 0.4em;
+  height: 2.5em;
+  padding: 0.4em 0.8em;
+}
+.form-button:hover {
+  background-color: #aaa;
+}
+.form-button-text {
+  font-size: 90%;
+  font-weight: bold;
+}
+div#comment-submit-message {
+  height: 2em;
+  box-sizing: border-box;
+  padding: 0.2em 0.4em;
+  margin-bottom: 0.8em;
+}
+.comment-message-bg-success {
+  background-color: #dff0d8;
+  border-color: #d0e9c6;
+  color: #3c763d;
+  border: 1px solid;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.comment-message-bg-error {
+  background-color: #f2dede;
+  border-color: #ebcccc;
+  color: #a94442;
+  border: 1px solid;
+  border-radius: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+</script>
+<script>
+  $(function() {
+    $('#comment-form').on('submit', function(e) {
+
+        e.preventDefault();
+
+        // Disable submit button
+        $(".form-button").prop("disabled", true);
+        $(".form-button span").html("Submitting");
+        $(".form-button span").addClass('form-button-disabled')
+
+        // Remove any old message (may happen if user resubmitting after error
+        $('#comment-submit-message').removeClass('comment-message-bg-error');
+        $("#comment-submit-message").html("");
+
+        $.ajax({
+          url: $(this).attr('action'),
+          method: "POST",
+          data: $(this).serialize(),
+          success: handleSuccess,
+          error: handleError,
+        });
+    });
+  });
+  function handleSuccess(data) {
+    $('#comment-submit-message').removeClass('comment-message-bg-error');
+    $('#comment-submit-message').addClass('comment-message-bg-success');
+    $("#comment-submit-message").html("Comment submitted successfully and is awaiting moderation");
+    $('#comment-form').find("input#name").val("");
+    $('#comment-form').find("input#email").val("");
+    $('#comment-form').find("input#website").val("");
+    $('#comment-form').find("textarea").val("");
+    setTimeout(function() {
+      $('#comment-submit-message').removeClass('comment-message-bg-success');
+      $("#comment-submit-message").html("");
+      $(".form-button").prop("disabled", false);
+      $(".form-button span").html("Submit Comment");
+      $(".form-button span").removeClass('form-button-disabled')
+    }, 2000);
+  }
+  function handleError(data) {
+    $('#comment-submit-message').removeClass('comment-message-bg-success')
+    $('#comment-submit-message').addClass('comment-message-bg-error')
+    $("#comment-submit-message").html("An error was encountered while attempting to submit your comment");
+    setTimeout(function() {
+      $(".form-button").prop("disabled", false);
+      $(".form-button span").html("Submit Comment");
+      $(".form-button span").removeClass('form-button-disabled')
+    }, 2000);
+  }
+</script>
+<hr>
+<div id="comment-form-header">
+  <h2>Leave a comment</h2>
+</div>
+{%- assign action_url = site.jekyll_comments.comment_server -%}
+{%- assign action_url = action_url | append: "/comment/" -%}
+{%- assign action_url = action_url | append: site.jekyll_comments.service_token -%}
+<form id="comment-form" action="{{ action_url }}" method="post">
+  <input type="hidden" id="slug" name="slug" value="{{ page.slug }}">
+  <div class="form-control-group">
+    <label for="name">Name <span>(Required, displayed)<span></label>
+    <input type="text" class="comment-form-control" id="name" name="name" required>
+  </div>
+  <div class="form-control-group">
+  <label for="email">Email <span>(Required, not displayed)</span></label>
+  <input type="email" class="comment-form-control" id="email" name="email" required>
+  </div>
+  <div class="form-control-group">
+  <label for="website">Website <span>(Optional)</span></label>
+  <input type="text" class="comment-form-control" id="website" name="website">
+  </div>
+  <div class="form-control-group">
+  <label for="message">Comment <span>(Required)</span></label>
+  <textarea id="message" class="comment-form-control" name="message" rows="6" placeholder="Enter your comment" required></textarea>
+  </div>
+  <div id="comment-submit-message">
+  </div>
+  <button class="form-button" type="submit">
+    <span class="form-button-text">Submit Comment</span>
+  </button>
+</form>

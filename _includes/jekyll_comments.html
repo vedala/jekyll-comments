@@ -1,31 +1,106 @@
-{% if site.jekyll_comments.show_comments %}
-
-  {% if site.jekyll_comments.allow_new_comments %}
-    {% include jekyll_comments_form.html %}
-  {% endif %}
-
-  {% assign comments_arr = nil | compact %}
-  {% for comment_val in site.data.jekyll_comments[page.slug] %}
-    {% assign comments_arr = comments_arr | push: comment_val[1] %}
-  {% endfor %}
-  {% assign num_comments = comments_arr | size %}
-  {% if num_comments == 1 %}
-    {% assign display_word = ' Comment' %}
-  {% else %}
-    {% assign display_word = ' Comments' %}
-  {% endif %}
+{% assign comments_arr = nil | compact %}
+{% for comment_val in site.data.jekyll_comments[page.slug] %}
+  {% assign comments_arr = comments_arr | push: comment_val[1] %}
+{% endfor %}
+{% assign num_comments = comments_arr | size %}
+{% if num_comments == 1 %}
+  {% assign display_word = ' Comment' %}
+{% else %}
+  {% assign display_word = ' Comments' %}
+{% endif %}
+<style>
+ul#comments, li.comment {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+ul#comments {
+  list-style: none;
+}
+li.comment {
+  margin-bottom: 3em;
+}
+.clearfix-group:before,
+.clearfix-group:after {
+  content: "";
+  display: table;
+}
+.clearfix-group:after {
+  clear: both;
+}
+.clearfix-group {
+  clear: both;
+  *zoom: 1;
+}
+div.comment-gravatar {
+  float: left;
+  margin: 0 20px 0 0;
+  width: 60px;
+  border: solid 1px #bbb;
+}
+div.comment-content {
+  float: left;
+  margin: 0;
+  width: calc(100% - 120px);
+}
+div.comment-message {
+  margin-top: 0.75em;
+}
+div.comment-message p {
+  font-size: 85%;
+  white-space: pre-wrap;
+}
+span.commenter-name,
+span.commenter-name a {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
+}
+span.commenter-name a:hover {
+  opacity: 0.7;
+}
+span.comment-date {
+  padding-left: 1em;
+  font-size: 0.7em;
+}
+div#comment-header {
+  margin: 2em 0 2em 0;
+}
+div#comment-header h2 {
+  font-size: 1.4em;
+  font-weight: bold;
+}
+</style>
+<hr>
+<div id="comment-header">
   <h2>{{ num_comments }}{{ display_word }}</h2>
-  <hr>
-  <br>
-  {% assign sorted_comments_arr = comments_arr | sort: 'date' | reverse %}
+</div>
+{% assign sorted_comments_arr = comments_arr | sort: 'date' | reverse %}
+<ul id="comments">
   {% for comment in sorted_comments_arr %}
-    <p>
-      {{ comment.name }} - {{ comment.date | date_to_string }}
-    </p>
-    <p>
-      {{ comment.message }}
-    </p>
-    <hr>
-    <br>
+    <li class="comment">
+    <div class="clearfix-group">
+      <div class="comment-gravatar">
+        <img src="https://www.gravatar.com/avatar/{{ comment.gravatar }}?d=blank&s=60">
+      </div>
+      <div class="comment-content">
+        {% if comment.website %}
+          <span class="commenter-name"><a href="{{ comment.website }}">{{ comment.name }}</a></span><span class="comment-date">{{ comment.date | date_to_string }}</span>
+        {% else %}
+          <span class="commenter-name">{{ comment.name }}</span> - <span class="comment-date">{{ comment.date | date_to_string }}</span>
+        {% endif %}
+        <div class="comment-message">
+          <p>{{ comment.message }}</p>
+        </div>
+      </div>
+    </div>
+    </li>
   {% endfor %}
+</ul>
+
+{% if site.jekyll_comments.allow_new_comments == "yes" %}
+  {% include jekyll_comments_form.html %}
 {% endif %}
