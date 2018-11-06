@@ -178,7 +178,7 @@ Submit a test comment and verify you receive a success message.
 ## Look for pull request
 
 Look for pull request created by the comment server in your blog repository on `github.com`.
-The pull request will have the title "Comment Submission".
+The pull request will have the title "Comment submission".
 
 The pull request contains a new file which has the submitted comment data. If `awesome-blog`
 is the slug of the post where comment was submitted from, the file created will look like:
