@@ -13,7 +13,7 @@ new Jekyll blog, follow the [Jekyll documentation](https://jekyllrb.com/docs/).
 
 ## Enable comments in your blog's `_config.yml`
 
-To enable commenting in your blog, add the following to your blog's `_config.yml`:
+To enable commenting, add the following to your blog's `_config.yml`:
 
 ```
 ...
@@ -33,6 +33,11 @@ application, which is described further below.
 
 * If it does not already exist, create a folder `_includes` within your blog's
   root folder.
+
+  ```
+  $ mkdir _includes
+  ```
+
 * Download the following files from this repository and save them into the
   `_includes` folder:
 
@@ -107,7 +112,7 @@ $ cp /path/to/your/ruby/installation/lib/ruby/gems/2.3.0/gems/minima-2.5.0/_layo
 ## Customize post.html layout to include jekyll-comments
 
 Add the code to check and include the commenting system to your copy of `post.html`.
-The code needs to added towards the bottom of the layout close to the `disqus`
+The code needs to be added towards the bottom of the layout, close to the `disqus`
 check that `minima` theme already includes. You will add the following markup:
 
 ```
@@ -124,15 +129,16 @@ The application is located in the repo [flask-static-comment](https://github.com
 
 ## Update your `_config.yml` with server details
 
-You will need to update your blog's `config.yml` with two pieces of information
+You will need to update your blog's `_config.yml` with two pieces of information
 about comment submissions server:
 
 * `comment_server`
 * `service_token`
 
+
 ### Localhost deployment
 
-If you are testing your comment system locally, your `_config.yml` will look something
+If you are testing the commenting system locally, your `_config.yml` will look something
 like this after the update:
 
 ```
@@ -152,6 +158,7 @@ In case you deployed the comment submission server using a hosting provider, you
 
 ```
 ...
+
 jekyll_comments:
   show_comments: "yes"
   allow_new_comments: "yes"
@@ -170,15 +177,17 @@ Submit a test comment and verify you receive a success message.
 
 ## Look for pull request
 
-Look for pull request created by the comment server in your blog repository with the
-title "Comment Submission".
+Look for pull request created by the comment server in your blog repository on `github.com`.
+The pull request will have the title "Comment Submission".
 
-The pull request contains a new file containing comment data. If `awesome-blog` is the slug
-of the post where comment was submitted from, the file created will look like:
+The pull request contains a new file which has the submitted comment data. If `awesome-blog`
+is the slug of the post where comment was submitted from, the file created will look like:
 
-`_data/jekyll_comments/awesome-blog/a_random_filename.yml`
+```
+_data/jekyll_comments/awesome-blog/a_random_filename.yml
+```
 
-The contents of the file look like:
+The contents of the file will look like:
 
 ```
 name: Joe Commenter
@@ -196,8 +205,8 @@ The pull request serves as moderation of comments submitted on your blog. Merge 
 the pull request.
 
 
-## Comment should show up
+## Submitted comment should show up
 
 After GitHub Pages regenerates your site (or Jekyll regenerates if serving locally), the
-comment should show up on your site. In case you are serving on localhost, you will have
-to do a `git pull` in pull the new comment data into your local repository.
+comment should show up on your site. If serving on localhost, you will have to do a `git pull`
+to pull the new comment data into your local repository.
