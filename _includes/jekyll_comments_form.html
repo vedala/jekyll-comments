@@ -150,6 +150,7 @@ div#comment-submit-message {
 {%- assign action_url = action_url | append: site.jekyll_comments.service_token -%}
 <form id="comment-form" action="{{ action_url }}" method="post">
   <input type="hidden" id="slug" name="slug" value="{{ page.slug }}">
+  <input type="hidden" id="post_url" name="post_url" value="{{ site.url | append: page.url }}">
   <div class="form-control-group">
     <label for="name">Name <span>(Required, displayed)<span></label>
     <input type="text" class="comment-form-control" id="name" name="name" required>
