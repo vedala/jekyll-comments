@@ -4,6 +4,13 @@ This repository contains a commenting system for Jekyll-generated static website
 Following instructions assume you are using the Jekyll `minima` theme. You will have
 to adapt the instructions if you are using a different theme.
 
+## Inspiration
+
+This project is inspired by and derived from Damien Guard's project that is described
+in detail at the blog post [here](https://damieng.com/blog/2018/05/28/wordpress-to-jekyll-comments)
+and in the two github repositories: [here](https://github.com/damieng/jekyll-blog-comments) and
+[here](https://github.com/Azure-Functions/jekyll-blog-comments).
+
 
 ## Jekyll blog
 
